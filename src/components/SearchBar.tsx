@@ -5,11 +5,11 @@ interface SearchBarProps {
 }
 
 const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
-  const [location, setLocation] = useState<string>("");
+  const [city, setCity] = useState("");
 
-  const handleSearch = () => {
-    if (location.trim()) {
-      onSearch(location);
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Enter") {
+      onSearch(city);
     }
   };
 
@@ -17,11 +17,12 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
     <div className="search-container">
       <input
         type="text"
-        value={location}
-        onChange={(e) => setLocation(e.target.value)}
-        placeholder="Enter city"
+        value={city}
+        onChange={(e) => setCity(e.target.value)}
+        onKeyDown={handleKeyDown} 
+        placeholder="Enter city..."
       />
-      <button onClick={handleSearch}>Search</button>
+      <button onClick={() => onSearch(city)}>Search</button>
     </div>
   );
 };

@@ -9,10 +9,10 @@ const WeatherDisplay: React.FC<WeatherDisplayProps> = ({ weather }) => {
 
   // Function to get background image based on temperature
   const getBackgroundImage = (temp: number) => {
-    if (temp > 25) return "/hot.jpg";  
-    if (temp > 15) return "/mild.jpg"; 
-    if (temp > 5) return "/cool.jpg";  
-    return "/cold.jpg";                
+    if (temp > 25) return "/weather-app/hot.jpg";  
+    if (temp > 15) return "/weather-app/mild.jpg"; 
+    if (temp > 5) return "/weather-app/cool.jpg";  
+    return "/weather-app/cold.jpg";                
   };
 
   const backgroundImage = getBackgroundImage(weather.forecast[0]?.temp || 0);
