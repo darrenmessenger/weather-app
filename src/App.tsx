@@ -1,35 +1,56 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from "react";
+import SearchBar from "./components/SearchBar";
+import WeatherDisplay from "./components/WeatherDisplay";
+import { WeatherData, ForecastDay } from "./types";
 
-function App() {
-  const [count, setCount] = useState(0)
+const GEO_API = "https://geocoding-api.open-meteo.com/v1/search?name=";
+const WEATHER_API = "https://api.open-meteo.com/v1/forecast?daily=temperature_2m_max,wind_speed_10m_max&timezone=auto";
+
+const App: React.FC = () => {
+  const [weather, setWeather] = useState<WeatherData | null>(null);
+
+  const fetchWeather = async (city: string) => {
+    try {
+      // Step 1: Convert city name to latitude/longitude
+      const geoResponse = await fetch(`${GEO_API}${city}&count=1`);
+      const geoData = await geoResponse.json();
+      if (!geoData.results) {
+        alert("City not found.");
+        return;
+      }
+      const { latitude, longitude, name } = geoData.results[0];
+
+      // Step 2: Fetch weather for this location
+      const weatherResponse = await fetch(`${WEATHER_API}&latitude=${latitude}&longitude=${longitude}`);
+      const weatherData = await weatherResponse.json();
+
+      // Step 3: Format the weather data
+      const elevation = weatherData.elevation;
+
+      const forecast: ForecastDay[] = weatherData.daily.temperature_2m_max
+      .slice(0, 5)
+      .map((temp: number, index: number) => ({
+        date: new Date(weatherData.daily.time[index]).toDateString(),
+        temp: temp,
+        wind: weatherData.daily.wind_speed_10m_max[index],
+        elevation: elevation, 
+        latitude: latitude,
+        longitude: longitude,
+      }));
+
+      setWeather({ location: name, forecast });
+    } catch (error) {
+      console.error("Error fetching weather:", error);
+    }
+  };
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
+    <div>
+      <h1>Weather App</h1>
+      <SearchBar onSearch={fetchWeather} />
+      <WeatherDisplay weather={weather} />
+    </div>
+  );
+};
 
-export default App
+export default App;
