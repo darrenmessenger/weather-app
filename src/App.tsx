@@ -11,7 +11,6 @@ const App: React.FC = () => {
 
   const fetchWeather = async (city: string) => {
     try {
-      // Step 1: Convert city name to latitude/longitude
       const geoResponse = await fetch(`${GEO_API}${city}&count=1`);
       const geoData = await geoResponse.json();
       if (!geoData.results) {
@@ -20,11 +19,9 @@ const App: React.FC = () => {
       }
       const { latitude, longitude, name } = geoData.results[0];
 
-      // Step 2: Fetch weather for this location
       const weatherResponse = await fetch(`${WEATHER_API}&latitude=${latitude}&longitude=${longitude}`);
       const weatherData = await weatherResponse.json();
 
-      // Step 3: Format the weather data
       const elevation = weatherData.elevation;
 
       const forecast: ForecastDay[] = weatherData.daily.temperature_2m_max
