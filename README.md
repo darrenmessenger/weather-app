@@ -16,7 +16,7 @@ This is a React Weather App that allows users to search for a city and retrieve 
 - React.js – JavaScript library for building UI
 - TypeScript – Statically typed JavaScript
 - CSS – Styling for components
-- Jest & React Testing Library – For unit testing  
+- Jest – For unit testing  
 
 ### Backend / API
 - Open-Meteo API – Fetches weather data based on city search
@@ -71,6 +71,36 @@ Tests if the weather display component:
 Tests if the main application:
 - Fetches weather data correctly
 - Displays forecast when search is performed
+
+---
+
+### Deployment on GitHub Pages
+
+This project is deployed on GitHub Pages.
+
+#### Steps to Deploy
+
+- Install GitHub Pages package
+
+`
+npm install gh-pages --save-dev
+`
+- Add deployment scripts to package.json
+
+`
+"scripts": {
+  "predeploy": "npm run build",
+  "deploy": "gh-pages -d dist"
+}
+`
+
+- Run the deployment command
+
+`
+npm run deploy
+`
+
+The app will be available at: [GitHub Pages Deployment](https://darrenmessenger.github.io/weather-app/)
 
 ---
 
