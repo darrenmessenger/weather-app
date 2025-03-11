@@ -1,3 +1,4 @@
+import React from "react";
 import { WeatherData } from "../types";
 
 interface WeatherDisplayProps {
@@ -36,8 +37,8 @@ const WeatherDisplay: React.FC<WeatherDisplayProps> = ({ weather }) => {
             <p><strong>Temperature:</strong> {day.temp}°C</p>
             <p><strong>Wind Speed:</strong> {day.wind} m/s</p>
             <p><strong>Elevation:</strong> {Math.round(day.elevation)}m</p>
-            <p><strong>Latitude:</strong> {day.latitude.toFixed(2)}</p>
-            <p><strong>Longitude:</strong> {day.longitude.toFixed(2)}</p>
+            <p><strong>Latitude:</strong> {day.latitude ? day.latitude.toFixed(2) : "N/A"}</p>
+            <p><strong>Longitude:</strong> {day.longitude ? day.longitude.toFixed(2) : "N/A"}</p>
           </div>
         ))}
       </div>
